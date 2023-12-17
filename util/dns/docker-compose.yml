@@ -1,0 +1,22 @@
+version: "3.3"
+services:
+  dnscensor:
+    build: .
+    image: user/dnscensor
+    volumes:
+      - data:/app/data
+      - pcap:/app/pcap
+    entrypoint: bash -c 'cd /app && find -L /app/data -name "*.txt.uniq" -exec cat {} + | ./run.sh'
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/dns_zone/uniq
+  pcap:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/pcap
